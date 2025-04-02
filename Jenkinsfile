@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-github-username/your-repo-name.git'
+                git 'https://github.com/Sanoj-sudo/collect.git'
             }
         }
         
