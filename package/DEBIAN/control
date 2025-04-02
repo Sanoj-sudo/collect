@@ -1,0 +1,7 @@
+Package: collect-info
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: sanoj sanojkumar715@email.com
+Description: A script that collects system information using gum UI.
