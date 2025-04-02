@@ -10,9 +10,10 @@ pipeline {
         
         stage('Setup Environment') {
             steps {
-                sh 'sudo apt update && sudo apt install dpkg-dev -y'
+                sh 'SUDO_ASKPASS=/etc/askpass-jenkins.sh sudo -A apt update && sudo -A apt install dpkg-dev -y'
             }
         }
+
 
         stage('Build DEB Package') {
             steps {
