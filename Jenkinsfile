@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Sanoj-sudo/collect.git'
+                git branch: 'main', url: 'https://github.com/Sanoj-sudo/collect.git'
             }
         }
         
@@ -20,7 +20,7 @@ pipeline {
                 sh 'cp collect_info.sh package/usr/local/bin/'
                 sh 'chmod +x package/usr/local/bin/collect_info.sh'
                 sh 'mkdir -p package/DEBIAN'
-                sh 'echo "Package: collect-info\nVersion: 1.0\nSection: utils\nPriority: optional\nArchitecture: all\nMaintainer: Your Name <your@email.com>\nDescription: A script that collects system information using gum UI." > package/DEBIAN/control'
+                sh 'echo "Package: collect-info\nVersion: 1.0\nSection: utils\nPriority: optional\nArchitecture: all\nMaintainer: sanoj sanojkumar715@email.com\nDescription: A script that collects system information using gum UI." > package/DEBIAN/control'
                 sh 'dpkg-deb --build package collect-info_1.0_all.deb'
             }
         }
