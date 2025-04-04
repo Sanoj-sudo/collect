@@ -63,7 +63,7 @@ pipeline {
         }
     }
 }
-// Post-build actions
+    // Post-build actions
     post {
         success {
             echo 'Build completed successfully!'
@@ -72,4 +72,3 @@ pipeline {
             echo 'Build failed!'
         }
     }
-}
