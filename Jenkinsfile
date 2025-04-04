@@ -55,15 +55,13 @@ pipeline {
             }
         }
 
-
         stage('Archive Packages') {
             steps {
                 archiveArtifacts artifacts: 'collect-info_1.0_all.deb, rpm_build/RPMS/noarch/*.rpm', fingerprint: true
             }
         }
     }
-}
-    // Post-build actions
+
     post {
         success {
             echo 'Build completed successfully!'
@@ -72,3 +70,4 @@ pipeline {
             echo 'Build failed!'
         }
     }
+}
