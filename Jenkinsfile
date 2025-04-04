@@ -19,6 +19,7 @@ pipeline {
                 sh 'mkdir -p package/usr/local/bin'
                 sh 'cp collect_data.sh package/usr/local/bin/'
                 sh 'chmod +x package/usr/local/bin/collect_data.sh'
+
                 sh 'mkdir -p package/DEBIAN'
                 sh '''
                 cat <<EOF > package/DEBIAN/control
@@ -31,6 +32,7 @@ pipeline {
                 Description: A script that collects system information using gum UI.
                 EOF
                 '''
+
                 sh 'dpkg-deb --build package collect-info_1.0_all.deb'
             }
         }
@@ -41,8 +43,8 @@ pipeline {
                 sh 'which rpmbuild || echo "rpmbuild not found!"'
 
                 # Create necessary RPM directories
-                sh 'mkdir -p rpm_package/{BUILD,RPMS,SOURCES,SPECS,SRPMS}'
-                sh 'mkdir -p rpm_package/usr/local/bin'
+                sh 'mkdir -p rpm_package/{BUILD,RPMS/noarch,SOURCES,SPECS,SRPMS,tmp}'
+                sh 'mkdir -p rpm_package/tmp/usr/local/bin'
 
                 # Copy the script
                 sh 'cp collect_data.sh rpm_package/SOURCES/'
@@ -62,13 +64,13 @@ pipeline {
                 A script that collects system information using gum UI.
 
                 %prep
-                %setup -q
-
-                %build
+                mkdir -p %{_tmppath}/usr/local/bin
+                cp %{_sourcedir}/collect_data.sh %{_tmppath}/usr/local/bin/
+                chmod +x %{_tmppath}/usr/local/bin/collect_data.sh
 
                 %install
                 mkdir -p %{buildroot}/usr/local/bin
-                cp %{_sourcedir}/collect_data.sh %{buildroot}/usr/local/bin/
+                cp %{_tmppath}/usr/local/bin/collect_data.sh %{buildroot}/usr/local/bin/
                 chmod +x %{buildroot}/usr/local/bin/collect_data.sh
 
                 %files
