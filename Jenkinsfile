@@ -2,15 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
-
         stage('Checkout') {
             steps {
-                git branch: 'project47', url: 'https://github.com/Sanoj-sudo/collect.git'
+                git branch: 'main', url: 'https://github.com/Sanoj-sudo/collect.git'
             }
         }
 
@@ -23,7 +17,7 @@ pipeline {
         stage('Build DEB Package') {
             steps {
                 sh 'mkdir -p package/usr/local/bin'
-                sh 'cp package/DEBIAN/script/collect_data.sh package/usr/local/bin/'
+                sh 'cp ppackage/DEBIAN/script/collect_data.sh package/usr/local/bin/'
                 sh 'chmod +x package/usr/local/bin/collect_data.sh'
 
                 sh 'mkdir -p package/DEBIAN'
@@ -38,31 +32,24 @@ pipeline {
                 sh 'echo "Starting RPM build process..."'
                 sh 'which rpmbuild || echo "rpmbuild not found!"'
 
-                sh 'mkdir -p rpm_build/{BUILD,RPMS,SOURCES,SPECS,SRPMS}'
-                sh 'mkdir -p rpm_build/usr/local/bin'
-                sh 'cp package/rpm_package/script/collect_data.sh rpm_build/SOURCES/'
-                sh 'chmod +x rpm_build/SOURCES/collect_data.sh'
+                sh 'mkdir -p rpm_package/{BUILD,RPMS/noarch,SOURCES,SPECS,SRPMS,tmp}'
+                sh 'mkdir -p rpm_package/tmp/usr/local/bin'
 
-                sh 'cp package/rpm_package/SPECS/collect-info.spec rpm_build/SPECS/collect-info.spec'
+                sh 'cp package/rpm_package/script/collect_data.sh rpm_package/SOURCES/'
+                sh 'chmod +x rpm_package/SOURCES/collect_data.sh'
 
+                sh 'cp collect-info.spec rpm_package/SPECS/'
+
+                # Build RPM package
                 sh 'echo "Running rpmbuild..."'
-                sh 'rpmbuild --define "_topdir $(pwd)/rpm_build" -bb rpm_build/SPECS/collect-info.spec'
+                sh 'rpmbuild --define "_topdir $(pwd)/rpm_package" -bb rpm_package/SPECS/collect-info.spec'
             }
         }
 
         stage('Archive Packages') {
             steps {
-                archiveArtifacts artifacts: 'collect-info_1.0_all.deb, rpm_build/RPMS/noarch/*.rpm', fingerprint: true
+                archiveArtifacts artifacts: 'collect-info_1.0_all.deb, rpm_package/RPMS/noarch/collect-info-1.0-1.noarch.rpm', fingerprint: true
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build completed successfully!'
-        }
-        failure {
-            echo 'Build failed!'
         }
     }
 }

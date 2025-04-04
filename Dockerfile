@@ -5,7 +5,7 @@ USER root
 
 # Install system dependencies and sudo
 RUN apt-get update && \
-    apt-get install -y sudo rpm dpkg-dev build-essential fakeroot && \
+    apt-get install -y sudo rpm dpkg-dev && \
     apt-get clean
 
 # Allow Jenkins to use sudo without a password
@@ -36,10 +36,6 @@ COPY Jenkinsfile /var/jenkins_home/Jenkinsfile
 
 # Set correct permissions
 RUN chown -R jenkins:jenkins /var/jenkins_home/jobs
-
-# Create RPM build directories (optional)
-RUN mkdir -p /home/jenkins/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} && \
-    chown -R jenkins:jenkins /home/jenkins/rpmbuild
 
 # Switch back to Jenkins user
 USER jenkins
