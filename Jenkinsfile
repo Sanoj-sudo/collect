@@ -23,7 +23,7 @@ pipeline {
         stage('Build DEB Package') {
             steps {
                 sh 'mkdir -p package/usr/local/bin'
-                sh 'cp collect_data.sh package/usr/local/bin/'
+                sh 'cp package/DEBIAN/script/collect_data.sh package/usr/local/bin/'
                 sh 'chmod +x package/usr/local/bin/collect_data.sh'
 
                 sh 'mkdir -p package/DEBIAN'
