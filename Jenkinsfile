@@ -40,7 +40,6 @@ pipeline {
 
                 sh 'cp collect-info.spec rpm_package/SPECS/'
 
-                # Build RPM package
                 sh 'echo "Running rpmbuild..."'
                 sh 'rpmbuild --define "_topdir $(pwd)/rpm_package" -bb rpm_package/SPECS/collect-info.spec'
             }
