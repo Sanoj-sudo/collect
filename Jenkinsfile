@@ -38,18 +38,13 @@ pipeline {
                 sh 'echo "Starting RPM build process..."'
                 sh 'which rpmbuild || echo "rpmbuild not found!"'
 
-                // Create necessary RPM directories
                 sh 'mkdir -p rpm_build/{BUILD,RPMS,SOURCES,SPECS,SRPMS}'
                 sh 'mkdir -p rpm_build/usr/local/bin'
-
-                // Copy the script
                 sh 'cp package/rpm_package/script/collect_data.sh rpm_build/SOURCES/'
                 sh 'chmod +x rpm_build/SOURCES/collect_data.sh'
 
-                // Create SPEC file
                 sh 'cp package/rpm_package/SPECS/collect-info.spec rpm_build/SPECS/collect-info.spec'
 
-                // Build RPM package
                 sh 'echo "Running rpmbuild..."'
                 sh 'rpmbuild --define "_topdir $(pwd)/rpm_build" -bb rpm_build/SPECS/collect-info.spec'
             }
