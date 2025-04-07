@@ -25,7 +25,7 @@ pipeline {
                 cp control package/DEBIAN/
 
                 echo "Building DEB package..."
-                dpkg-deb --build package collect-info_1.0_all.deb
+                dpkg-deb -Zgzip --build package collect-info_1.0_all.deb
                 '''
             }
         }
