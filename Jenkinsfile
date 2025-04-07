@@ -11,6 +11,8 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 sh 'SUDO_ASKPASS=/etc/askpass-jenkins.sh sudo -A apt update && sudo -A apt install dpkg-dev -y'
+                sh 'SUDO_ASKPASS=/etc/askpass-jenkins.sh sudo -A apt install dpkg-dev fakeroot -y'
+
             }
         }
 
@@ -42,11 +44,8 @@ Depends: gum, sysstat
 Description: A script that collects system information using gum UI.
 EOF
 
-                # Fix ownership to root:root
-                chown -R root:root package
-
-                echo "✅ Building DEB package..."
-                dpkg-deb -Zgzip --build package collect-info_1.0_all.deb
+                  echo "✅ Building DEB package..."
+                  fakeroot dpkg-deb -Zgzip --build package collect-info_1.0_all.deb
                 '''
             }
         }
